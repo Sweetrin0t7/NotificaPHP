@@ -1,0 +1,14 @@
+Implementação:
+
+A FAZER:
+
+- Um único arquivo zip com a API na pasta api e a aplicação na pasta app
+- Se descompactado na raiz de um servidor Apache, deve sair funcionando:
+- As rotas devem seguir o padrão http://localhost/api/xxxx
+- A aplicação deve ser acessada em http://localhost/app
+- Deve ser utilizado banco de dados MySQL;
+- A implementação deve ser entregue, via Moodle, até o dia 17/12/2024.
+
+FEITO:
+
+- O banco deve se chamar api, acessado pelo usuário root, sem senha, em localhost, na porta padrão.
