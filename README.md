@@ -10,32 +10,24 @@ Os controladores são responsáveis por gerenciar as requisições HTTP e intera
 
 - **UsuarioController.php**: Controlador para gerenciar as requisições relacionadas aos usuários.
 - **DenunciaController.php**: Controlador para gerenciar as requisições relacionadas às denúncias.
-- **ComentarioController.php**: Controlador para gerenciar as requisições relacionadas aos comentários.
-- **CurtidaController.php**: Controlador para gerenciar as requisições relacionadas às curtidas.
 
 #### /service
 A pasta `/service` contém a lógica de negócio, que manipula as regras principais do sistema.
 
 - **UsuarioService.php**: Serviço que contém a lógica de manipulação dos dados do usuário.
 - **DenunciaService.php**: Serviço que contém a lógica de manipulação das denúncias.
-- **ComentarioService.php**: Serviço que contém a lógica de manipulação dos comentários.
-- **CurtidaService.php**: Serviço que contém a lógica de manipulação das curtidas.
 
 #### /repository
 Os repositórios são responsáveis pela interação com o banco de dados, fornecendo métodos para recuperar e persistir dados.
 
 - **UsuarioRepository.php**: Repositório para manipular dados dos usuários no banco de dados.
 - **DenunciaRepository.php**: Repositório para manipular dados das denúncias no banco de dados.
-- **ComentarioRepository.php**: Repositório para manipular dados dos comentários no banco de dados.
-- **CurtidaRepository.php**: Repositório para manipular dados das curtidas no banco de dados.
 
 #### /model
 Os modelos representam as entidades principais do sistema e sua estrutura de dados.
 
 - **Usuario.php**: Modelo para representar um usuário no sistema.
 - **Denuncia.php**: Modelo para representar uma denúncia no sistema.
-- **Comentario.php**: Modelo para representar um comentário no sistema.
-- **Curtida.php**: Modelo para representar uma curtida no sistema.
 
 #### /database
 Contém arquivos relacionados à configuração e manipulação do banco de dados.
