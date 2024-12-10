@@ -23,118 +23,107 @@ class Database {
    public static function config() {
       $connection = self::getConnection();
   
-      // Exclui as tabelas se elas já existirem
-      $sql = "DROP TABLE IF EXISTS usuarios;
-              DROP TABLE IF EXISTS denuncias;
+      $sql = "DROP TABLE IF EXISTS curtidas;
               DROP TABLE IF EXISTS comentarios;
-              DROP TABLE IF EXISTS curtidas;";
+              DROP TABLE IF EXISTS denuncias;
+              DROP TABLE IF EXISTS usuarios;";
       $connection->exec($sql);
   
-      // Cria a tabela 'usuarios'
       $sql = "CREATE TABLE usuarios (
-                 id_usuario INT NOT NULL,
-                 cpf_usuario VARCHAR(11) NULL,
-                 nome_usuario VARCHAR(50) NULL,
+                 id_usuario INT NOT NULL AUTO_INCREMENT,
+                 cpf_usuario VARCHAR(11) NOT NULL,
+                 nome_usuario VARCHAR(50) NOT NULL,
                  telefone VARCHAR(15) NULL,
-                 senha VARCHAR(255) NULL,
-                 data_cadastro TIMESTAMP NULL,
-                 tipo_usuario ENUM('comum', 'admin') NULL,
-                 Usuarioscol VARCHAR(45) NULL,
+                 senha VARCHAR(255) NOT NULL,
+                 data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                 tipo_usuario ENUM('comum', 'admin') NOT NULL,
                  PRIMARY KEY (id_usuario)
               ) ENGINE = InnoDB;";
       $connection->exec($sql);
   
-      // Cria a tabela 'denuncias'
       $sql = "CREATE TABLE denuncias (
-                 id_denuncias INT NOT NULL,
-                 titulo VARCHAR(100) NULL,
-                 descricao VARCHAR(250) NULL,
-                 categoria ENUM('agua', 'saneamento', 'obras', 'outros') NULL,
+                 id_denuncias INT NOT NULL AUTO_INCREMENT,
+                 titulo VARCHAR(100) NOT NULL,
+                 descricao VARCHAR(250) NOT NULL,
+                 categoria ENUM('agua', 'saneamento', 'obras', 'outros') NOT NULL,
                  imagem VARCHAR(255) NULL,
                  localizacao VARCHAR(255) NULL,
-                 status ENUM('pendente', 'em andamento', 'resolvido') NULL,
-                 anonimo TINYINT NULL,
-                 data_criacao TIMESTAMP NULL,
+                 status ENUM('pendente', 'em andamento', 'resolvido') NOT NULL,
+                 anonimo TINYINT NOT NULL DEFAULT 0,
+                 data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                  Usuarios_id_usuario INT NOT NULL,
                  PRIMARY KEY (id_denuncias),
-                 FOREIGN KEY (Usuarios_id_usuario) REFERENCES usuarios(id_usuario)
+                 FOREIGN KEY (Usuarios_id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
               ) ENGINE = InnoDB;";
       $connection->exec($sql);
   
-      // Cria a tabela 'comentarios'
       $sql = "CREATE TABLE comentarios (
-                 id_comentario INT NOT NULL,
-                 conteudo VARCHAR(255) NULL,
-                 data_comentario TIMESTAMP NULL,
+                 id_comentario INT NOT NULL AUTO_INCREMENT,
+                 conteudo VARCHAR(255) NOT NULL,
+                 data_comentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                  Denuncias_id_denuncias INT NOT NULL,
                  Usuarios_id_usuario INT NOT NULL,
                  PRIMARY KEY (id_comentario),
-                 FOREIGN KEY (Denuncias_id_denuncias) REFERENCES denuncias(id_denuncias),
-                 FOREIGN KEY (Usuarios_id_usuario) REFERENCES usuarios(id_usuario)
+                 FOREIGN KEY (Denuncias_id_denuncias) REFERENCES denuncias(id_denuncias) ON DELETE CASCADE,
+                 FOREIGN KEY (Usuarios_id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
               ) ENGINE = InnoDB;";
       $connection->exec($sql);
   
-      // Cria a tabela 'curtidas'
       $sql = "CREATE TABLE curtidas (
-                 id_curtida INT NOT NULL,
+                 id_curtida INT NOT NULL AUTO_INCREMENT,
                  id_usuario INT NOT NULL,
-                 id_denuncia INT NULL,
+                 id_denuncia INT NOT NULL,
                  PRIMARY KEY (id_curtida),
-                 FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
-                 FOREIGN KEY (id_denuncia) REFERENCES denuncias(id_denuncias)
+                 FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+                 FOREIGN KEY (id_denuncia) REFERENCES denuncias(id_denuncias) ON DELETE CASCADE
               ) ENGINE = InnoDB;";
       $connection->exec($sql);
   
-      // Inserção de dados mockados na tabela 'usuarios'
       $usuarios = [
-          ["id_usuario" => 1, "cpf_usuario" => "12345678901", "nome_usuario" => "Ana Silva", "telefone" => "11987654321", "senha" => "senha123", "data_cadastro" => date("Y-m-d H:i:s"), "tipo_usuario" => "comum", "Usuarioscol" => "Extra1"],
-          ["id_usuario" => 2, "cpf_usuario" => "09876543210", "nome_usuario" => "Bruno Costa", "telefone" => "21987654321", "senha" => "senha456", "data_cadastro" => date("Y-m-d H:i:s"), "tipo_usuario" => "admin", "Usuarioscol" => "Extra2"],
-          ["id_usuario" => 3, "cpf_usuario" => "11223344556", "nome_usuario" => "Carlos Souza", "telefone" => "31987654321", "senha" => "senha789", "data_cadastro" => date("Y-m-d H:i:s"), "tipo_usuario" => "comum", "Usuarioscol" => "Extra3"],
+          ["cpf_usuario" => "12345678901", "nome_usuario" => "Ana Silva", "telefone" => "11987654321", "senha" => "senha123", "tipo_usuario" => "comum"],
+          ["cpf_usuario" => "09876543210", "nome_usuario" => "Bruno Costa", "telefone" => "21987654321", "senha" => "senha456", "tipo_usuario" => "admin"],
+          ["cpf_usuario" => "11223344556", "nome_usuario" => "Carlos Souza", "telefone" => "31987654321", "senha" => "senha789", "tipo_usuario" => "comum"],
       ];
   
-      $stmt = $connection->prepare("INSERT INTO usuarios (id_usuario, cpf_usuario, nome_usuario, telefone, senha, data_cadastro, tipo_usuario, Usuarioscol) 
-                                    VALUES (:id_usuario, :cpf_usuario, :nome_usuario, :telefone, :senha, :data_cadastro, :tipo_usuario, :Usuarioscol);");
+      $stmt = $connection->prepare("INSERT INTO usuarios (cpf_usuario, nome_usuario, telefone, senha, tipo_usuario) 
+                                    VALUES (:cpf_usuario, :nome_usuario, :telefone, :senha, :tipo_usuario);");
       foreach ($usuarios as $usuario) {
           $stmt->execute($usuario);
       }
-  
-      // Inserção de dados mockados na tabela 'denuncias'
+
       $denuncias = [
-          ["id_denuncias" => 1, "titulo" => "Falta de água", "descricao" => "Não há fornecimento de água no bairro.", "categoria" => "agua", "imagem" => "imagem1.jpg", "localizacao" => "Rua A, Bairro X", "status" => "pendente", "anonimo" => 0, "data_criacao" => date("Y-m-d H:i:s"), "Usuarios_id_usuario" => 1],
-          ["id_denuncias" => 2, "titulo" => "Buraco na rua", "descricao" => "Um grande buraco está atrapalhando o trânsito.", "categoria" => "obras", "imagem" => "imagem2.jpg", "localizacao" => "Rua B, Bairro Y", "status" => "em andamento", "anonimo" => 1, "data_criacao" => date("Y-m-d H:i:s"), "Usuarios_id_usuario" => 2],
+          ["titulo" => "Falta de água", "descricao" => "Não há fornecimento de água no bairro.", "categoria" => "agua", "imagem" => "imagem1.jpg", "localizacao" => "Rua A, Bairro X", "status" => "pendente", "anonimo" => 0, "Usuarios_id_usuario" => 1],
+          ["titulo" => "Buraco na rua", "descricao" => "Um grande buraco está atrapalhando o trânsito.", "categoria" => "obras", "imagem" => "imagem2.jpg", "localizacao" => "Rua B, Bairro Y", "status" => "em andamento", "anonimo" => 1, "Usuarios_id_usuario" => 2],
       ];
   
-      $stmt = $connection->prepare("INSERT INTO denuncias (id_denuncias, titulo, descricao, categoria, imagem, localizacao, status, anonimo, data_criacao, Usuarios_id_usuario) 
-                                    VALUES (:id_denuncias, :titulo, :descricao, :categoria, :imagem, :localizacao, :status, :anonimo, :data_criacao, :Usuarios_id_usuario);");
+      $stmt = $connection->prepare("INSERT INTO denuncias (titulo, descricao, categoria, imagem, localizacao, status, anonimo, Usuarios_id_usuario) 
+                                    VALUES (:titulo, :descricao, :categoria, :imagem, :localizacao, :status, :anonimo, :Usuarios_id_usuario);");
       foreach ($denuncias as $denuncia) {
           $stmt->execute($denuncia);
       }
   
-      // Inserção de dados mockados na tabela 'comentarios'
       $comentarios = [
-          ["id_comentario" => 1, "conteudo" => "Também estamos sem água por aqui.", "data_comentario" => date("Y-m-d H:i:s"), "Denuncias_id_denuncias" => 1, "Usuarios_id_usuario" => 3],
-          ["id_comentario" => 2, "conteudo" => "Isso precisa ser resolvido logo!", "data_comentario" => date("Y-m-d H:i:s"), "Denuncias_id_denuncias" => 2, "Usuarios_id_usuario" => 1],
+          ["conteudo" => "Também estamos sem água por aqui.", "Denuncias_id_denuncias" => 1, "Usuarios_id_usuario" => 3],
+          ["conteudo" => "Isso precisa ser resolvido logo!", "Denuncias_id_denuncias" => 2, "Usuarios_id_usuario" => 1],
       ];
   
-      $stmt = $connection->prepare("INSERT INTO comentarios (id_comentario, conteudo, data_comentario, Denuncias_id_denuncias, Usuarios_id_usuario) 
-                                    VALUES (:id_comentario, :conteudo, :data_comentario, :Denuncias_id_denuncias, :Usuarios_id_usuario);");
+      $stmt = $connection->prepare("INSERT INTO comentarios (conteudo, Denuncias_id_denuncias, Usuarios_id_usuario) 
+                                    VALUES (:conteudo, :Denuncias_id_denuncias, :Usuarios_id_usuario);");
       foreach ($comentarios as $comentario) {
           $stmt->execute($comentario);
       }
-  
-      // Inserção de dados mockados na tabela 'curtidas'
+
       $curtidas = [
-          ["id_curtida" => 1, "id_usuario" => 1, "id_denuncia" => 1],
-          ["id_curtida" => 2, "id_usuario" => 2, "id_denuncia" => 2],
+          ["id_usuario" => 1, "id_denuncia" => 1],
+          ["id_usuario" => 2, "id_denuncia" => 2],
       ];
   
-      $stmt = $connection->prepare("INSERT INTO curtidas (id_curtida, id_usuario, id_denuncia) 
-                                    VALUES (:id_curtida, :id_usuario, :id_denuncia);");
+      $stmt = $connection->prepare("INSERT INTO curtidas (id_usuario, id_denuncia) 
+                                    VALUES (:id_usuario, :id_denuncia);");
       foreach ($curtidas as $curtida) {
           $stmt->execute($curtida);
       }
   
-      // Retorna uma resposta indicando o sucesso da operação
       http_response_code(201);
       echo json_encode(["message" => "Database is ready!"]);
   }
