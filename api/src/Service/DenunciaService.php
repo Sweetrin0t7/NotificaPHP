@@ -18,7 +18,7 @@ class DenunciaService
     function getDenuncias(?string $titulo): array
     {
         if ($titulo) {
-            if ($titulo === "") throw new APIException("Invalid search parameter!", 400);
+            if ($titulo === "") throw new APIException("Parametro de busca inválido!", 400);
             return $this->repository->findByTitulo($titulo);
         } else {
             return $this->repository->findAll();
@@ -28,7 +28,7 @@ class DenunciaService
     function getDenunciaById(int $id): Denuncia
     {
         $denuncia = $this->repository->findById($id);
-        if (!$denuncia) throw new APIException("Denuncia not found!", 404);
+        if (!$denuncia) throw new APIException("Denuncia não encontrada!", 404);
         return $denuncia;
     }
 
