@@ -18,7 +18,7 @@ class UsuarioService
     function getUsuarios(?string $nome_usuario): array
     {
         if ($nome_usuario) {
-            if ($nome_usuario === "") throw new APIException("Invalid search parameter!", 400);
+            if ($nome_usuario === "") throw new APIException("Parametros de busca inválidos!", 400);
             return $this->repository->findByNome($nome_usuario);
         }else {
             return $this->repository->findAll();
@@ -28,7 +28,7 @@ class UsuarioService
     function getUsuarioById(int $id): Usuario
     {
         $usuario = $this->repository->findById($id);
-        if (!$usuario) throw new APIException("Usuario not found!", 404);
+        if (!$usuario) throw new APIException("Usuario não encontrado!", 404);
         return $usuario;
     }
     function createNewUsuario(string $cpf_usuario, string $nome_usuario, string $telefone,  string $senha): Usuario
@@ -68,9 +68,9 @@ class UsuarioService
 
     private function validateUsuario(Usuario $usuario)
     {
-        if (strlen($usuario->getNomeUsuario()) < 3) throw new APIException("Nome must have at least 3 characters!", 400);
+        if (strlen($usuario->getNomeUsuario()) < 3) throw new APIException("Nome deve ter no mínimo 3 characters!", 400);
         if (!empty($usuario->getSenha()) && strlen($usuario->getSenha()) < 6) {
-            throw new APIException("Senha must have at least 6 characters!", 400);
+            throw new APIException("Senha deve ter no mínimo 6 characters!", 400);
         }
     }
 }
