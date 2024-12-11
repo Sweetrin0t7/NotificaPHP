@@ -40,7 +40,7 @@ class UsuarioService
             telefone: $telefone, 
             senha: password_hash(trim($senha), PASSWORD_BCRYPT),
             data_cadastro: null,
-            tipo_usuario: 'user' // Tipo padrão é o 'user'
+            tipo_usuario: 'comum' // Tipo padrão é o 'user'
         );
     
         $this->validateUsuario($usuario);
@@ -66,11 +66,22 @@ class UsuarioService
         $this->repository->delete($id);
     }
 
-    private function validateUsuario(Usuario $usuario)
-    {
-        if (strlen($usuario->getNomeUsuario()) < 3) throw new APIException("Nome deve ter no mínimo 3 characters!", 400);
+    private function validateUsuario(Usuario $usuario){
+        if (strlen($usuario->getNomeUsuario()) < 3){
+            throw new APIException("Nome deve ter no mínimo 3 caracteres!", 400);
+        }
         if (!empty($usuario->getSenha()) && strlen($usuario->getSenha()) < 6) {
-            throw new APIException("Senha deve ter no mínimo 6 characters!", 400);
+            throw new APIException("Senha deve ter no mínimo 6 caracteres!", 400);
+        }
+        if (!preg_match('/^\d{11}$/', $usuario->getCpfUsuario())) {
+            throw new APIException("CPF deve ter 11 números!", 400);
+        }
+        if (!preg_match('/^\d{15}$/', $usuario->getTelefone())) {
+            throw new APIException("Telefone deve ter 15 números!, incluindo o DDD", 400);
+        }
+        $tiposValidos = ['comum', 'admin'];
+        if (!in_array($usuario->getTipoUsuario(), $tiposValidos)) {
+            throw new APIException("Tipo de usuário inválido!", 400);
         }
     }
 }
