@@ -54,6 +54,28 @@ class UsuarioRepository {
         );
     }
 
+    public function findByNome(string $nome): array {
+        $stmt = $this->connection->prepare("SELECT * FROM usuarios WHERE nome_usuario LIKE :nome");
+        $stmt->bindValue(':nome', '%' . $nome . '%', \PDO::PARAM_STR);
+        $stmt->execute();
+    
+        $usuarios = [];
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $usuario = new Usuario(
+                Usuario_id_usuario: $row['id_usuario'],
+                cpf_usuario: $row['cpf_usuario'],
+                nome_usuario: $row['nome_usuario'],
+                telefone: $row['telefone'],
+                senha: $row['senha'],
+                data_cadastro: $row['data_cadastro'],
+                tipo_usuario: $row['tipo_usuario']
+            );
+            $usuarios[] = $usuario;
+        }
+    
+        return $usuarios;
+    }
+
     public function findByCpf(string $cpf_usuario): ?Usuario {
         $stmt = $this->connection->prepare("SELECT * FROM usuarios WHERE cpf_usuario = :cpf_usuario");
         $stmt->bindValue(':cpf_usuario', $cpf_usuario, \PDO::PARAM_STR);
