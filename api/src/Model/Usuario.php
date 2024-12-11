@@ -13,7 +13,7 @@ class Usuario implements \JsonSerializable {
     private string $tipo_usuario; // Enum: 'comum', 'admin'
 
     public function __construct(
-        int $Usuario_id_usuario,
+        ?int $Usuario_id_usuario = null,
         string $cpf_usuario,
         string $nome_usuario,
         string $telefone,
