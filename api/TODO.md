@@ -23,7 +23,7 @@ Em relação à API:
 
 --------------------------FEITO:
 
-- Deve implementar o padrão Controller – Service – Repository; (Renata)
+- Deve implementar o padrão Controller – Service – Repository; (Renata/Alessandra)
 
 - Deve utilizar PDO para a interação com o banco de dados; (Renata/Alessandra)
 
