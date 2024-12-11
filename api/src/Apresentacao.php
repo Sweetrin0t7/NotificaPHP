@@ -12,7 +12,7 @@ class Apresentacao {
                 'POST /api/denuncias', 
                 'GET /api/denuncia/:id',  
                 'DELETE /api/denuncia/:id', 
-                'GET /api/courses/:id/students', 
+                'GET /api/courses/:id/usuarios', 
                 'GET /api/db',
                 'GET /api' 
             ]

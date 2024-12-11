@@ -19,11 +19,10 @@ if (isset($_SERVER['REQUEST_URI']) && ($_SERVER['REQUEST_URI'] === '/api' || $_S
     exit;  
 } else {
     switch ($request->getResource()) { 
-        //Tenho que arrumar ainda pra usuarios
-        //case 'students':
-            //$studentController = new StudentController();
-            //$studentController->processRequest($request);
-            //break;
+        case 'usuarios':
+            $usuarioController = new UsuarioController();
+            $usuarioController->processRequest($request);
+            break;
 
         case 'denuncias':
             $controller = new DenunciaController();
