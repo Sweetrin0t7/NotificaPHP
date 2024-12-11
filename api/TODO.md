@@ -35,6 +35,8 @@ Em relação à API:
   formato JSON: { “autores”: [...], “rotas”: [...]; (Renata)
 
 --------FEITO EM USUÁRIO:
+- Deve validar dados e tratar erros, devolvendo a resposta adequada:
+  Validar as regras de negócio (no service); (Alessandra - Denuncia)
 
 --------FEITO EM DENÚNCIA:
 
