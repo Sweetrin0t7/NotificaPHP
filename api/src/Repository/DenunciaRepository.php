@@ -5,6 +5,7 @@ namespace Repository;
 use Database\Database;
 use Error\APIException;
 use Model\Denuncia;
+USE PDO;
 
 class DenunciaRepository {
    private $connection;
