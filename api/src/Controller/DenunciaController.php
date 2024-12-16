@@ -38,7 +38,7 @@ class DenunciaController
                     http_response_code(204);
                     break;
                 default:
-                    // Para qualquer outro método, gera uma exceção
+                    //*Para qualquer outro método, gera uma exceção
                     throw new APIException("Method not allowed!", 405);
             }
         } else {
@@ -56,7 +56,7 @@ class DenunciaController
                     echo json_encode($response);
                     break;
                 default:
-                    // Para qualquer outro método, gera uma exceção
+                    //*Para qualquer outro método, gera uma exceção
                     throw new APIException("Method not allowed!", 405);
             }
         }

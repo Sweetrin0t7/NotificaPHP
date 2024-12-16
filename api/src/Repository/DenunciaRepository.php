@@ -5,7 +5,6 @@ namespace Repository;
 use Database\Database;
 use Error\APIException;
 use Model\Denuncia;
-USE PDO;
 
 class DenunciaRepository {
    private $connection;
@@ -95,8 +94,8 @@ class DenunciaRepository {
       $stmt->bindValue(':descricao', $denuncia->getDescricao());
       $stmt->bindValue(':categoria', $denuncia->getCategoria());
       $stmt->bindValue(':status', $denuncia->getStatus());
-      $stmt->bindValue(':anonimo', $denuncia->isAnonimo(), \PDO::PARAM_BOOL);
-      $stmt->bindValue(':imagem', $denuncia->getImagem());
+      $stmt->bindValue(':anonimo', $denuncia->isAnonimo());
+      $stmt->bindValue(':imagem', $denuncia->getImagem(), \PDO::PARAM_STR);
       $stmt->bindValue(':localizacao', $denuncia->getLocalizacao());
       $stmt->bindValue(':Usuarios_id_usuario', $denuncia->getUsuariosIdUsuario(), \PDO::PARAM_INT);
       $stmt->execute();
@@ -124,7 +123,7 @@ class DenunciaRepository {
       $stmt->bindValue(':categoria', $denuncia->getCategoria(), \PDO::PARAM_STR);
       $stmt->bindValue(':status', $denuncia->getStatus(), \PDO::PARAM_STR);
       $stmt->bindValue(':anonimo', $denuncia->isAnonimo(), \PDO::PARAM_BOOL);
-      $stmt->bindValue(':imagem', $denuncia->getImagem());
+      $stmt->bindValue(':imagem', $denuncia->getImagem(), \PDO::PARAM_STR);
       $stmt->bindValue(':localizacao', $denuncia->getLocalizacao());
       $stmt->bindValue(':Usuarios_id_usuario', $denuncia->getUsuariosIdUsuario(), \PDO::PARAM_INT);
       $stmt->execute();
