@@ -36,7 +36,14 @@ Em relação à API:
 
 --------FEITO EM USUÁRIO:
 - Deve validar dados e tratar erros, devolvendo a resposta adequada:
-  Validar as regras de negócio (no service); (Alessandra - Denuncia)
+  Tratar rotas inexistes e métodos não permitidos; (Alessandra - Usuarios)
+  Validar as requisições recebidas (no controller); (Alessandra - Usuarios)
+  Validar as regras de negócio (no service); (Alessandra - Usuarios)
+
+  - Deve implementar apenas dois tipos de rotas, como por exemplo:
+  /api/clientes para todo o conjunto de clientes (Alessandra - Usuarios)
+
+  - Deve responder sempre em JSON, com o código de status HTTP adequado; (Alessandra - Usuarios)
 
 --------FEITO EM DENÚNCIA:
 
