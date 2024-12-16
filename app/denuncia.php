@@ -35,7 +35,7 @@ function callApi(string $method, string $url, array $data = []): array {
     return ['data' => json_decode($response, true), 'http_code' => $httpCode];
 }
 
-$apiUrl = "http://localhost/api/denuncias";
+$apiUrl = "http://localhost/NotificaPHP/api/denuncias";
 
 // Tratamento de POST para criação e edição
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -119,109 +119,113 @@ if (isset($_GET['edit_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Denúncias</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container mt-5">
-    <h1>Gerenciar Denúncias</h1>
+<body class="bg-blue-50">
+<div class="container mx-auto mt-5 p-4">
+    <h1 class="text-5xl font-semibold text-blue-700 mb-6">Gerenciar Denúncias</h1>
 
     <!-- Formulário de Criação/Edição -->
-    <form method="POST" enctype="multipart/form-data" class="mb-4">
+    <form method="POST" enctype="multipart/form-data" class="space-y-4 bg-white p-6 rounded-lg shadow-lg">
         <input type="hidden" name="action" value="<?= $editData ? 'edit' : 'create' ?>">
         <?php if ($editData): ?>
             <input type="hidden" name="id_denuncias" value="<?= $editData['id_denuncias'] ?>">
         <?php endif; ?>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="titulo" class="form-label">Título</label>
             <input type="text" class="form-control" id="titulo" name="titulo" value="<?= $editData['titulo'] ?? '' ?>" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="descricao" class="form-label">Descrição</label>
             <textarea class="form-control" id="descricao" name="descricao" rows="3" required><?= $editData['descricao'] ?? '' ?></textarea>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="categoria" class="form-label">Categoria</label>
-            <select class="form-select" id="categoria" name="categoria" required>
+            <select class="form-select p-3 w-full border border-gray-300 rounded-md" id="categoria" name="categoria" required>
                 <option value="agua" <?= isset($editData['categoria']) && $editData['categoria'] === 'agua' ? 'selected' : '' ?>>Água</option>
                 <option value="saneamento" <?= isset($editData['categoria']) && $editData['categoria'] === 'saneamento' ? 'selected' : '' ?>>Saneamento</option>
                 <option value="obras" <?= isset($editData['categoria']) && $editData['categoria'] === 'obras' ? 'selected' : '' ?>>Obras</option>
                 <option value="outros" <?= isset($editData['categoria']) && $editData['categoria'] === 'outros' ? 'selected' : '' ?>>Outros</option>
             </select>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="status" class="form-label">Status</label>
-            <select class="form-select" id="status" name="status" required>
+            <select class="form-select p-3 w-full border border-gray-300 rounded-md" id="status" name="status" required>
                 <option value="Pendente" <?= isset($editData['status']) && $editData['status'] === 'Pendente' ? 'selected' : '' ?>>Pendente</option>
                 <option value="Em andamento" <?= isset($editData['status']) && $editData['status'] === 'Em andamento' ? 'selected' : '' ?>>Em andamento</option>
                 <option value="Resolvido" <?= isset($editData['status']) && $editData['status'] === 'Resolvido' ? 'selected' : '' ?>>Resolvido</option>
             </select>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="Usuarios_id_usuario" class="form-label">Usuário</label>
-            <input type="number" class="form-control" id="Usuarios_id_usuario" name="Usuarios_id_usuario" value="<?= $editData['Usuarios_id_usuario'] ?? '' ?>" required>
+            <input type="number" class="form-control p-3 w-full border border-gray-300 rounded-md" id="Usuarios_id_usuario" name="Usuarios_id_usuario" value="<?= $editData['Usuarios_id_usuario'] ?? '' ?>" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="imagem" class="form-label">Imagem</label>
-            <input type="file" class="form-control" id="imagem" name="imagem">
+            <input type="file" class="form-control p-3 w-full border border-gray-300 rounded-md" id="imagem" name="imagem">
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="localizacao" class="form-label">Localização</label>
-            <input type="text" class="form-control" id="localizacao" name="localizacao" value="<?= $editData['localizacao'] ?? '' ?>">
+            <input type="text" class="form-control p-3 w-full border border-gray-300 rounded-md" id="localizacao" name="localizacao" value="<?= $editData['localizacao'] ?? '' ?>">
         </div>
-        <div class="form-check mb-3">
+        <div class="form-check mb-4">
             <input class="form-check-input" type="checkbox" id="anonimo" name="anonimo" <?= isset($editData['anonimo']) && $editData['anonimo'] ? 'checked' : '' ?>>
             <label class="form-check-label" for="anonimo">Anônimo</label>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn text-white bg-blue-600 px-6 py-3 rounded-md">Salvar</button>
     </form>
 
     <!-- Tabela de Listagem -->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Descrição</th>
-                <th>Categoria</th>
-                <th>Status</th>
-                <th>Localização</th>
-                <th>Imagem</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($denuncias)): ?>
-                <?php foreach ($denuncias as $denuncia): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($denuncia['id_denuncias']) ?></td>
-                        <td><?= htmlspecialchars($denuncia['titulo']) ?></td>
-                        <td><?= htmlspecialchars($denuncia['descricao']) ?></td>
-                        <td><?= htmlspecialchars($denuncia['categoria']) ?></td>
-                        <td><?= htmlspecialchars($denuncia['status']) ?></td>
-                        <td><?= htmlspecialchars($denuncia['localizacao'] ?? 'Não informado') ?></td>
-                        <td>
-                            <?php if (!empty($denuncia['imagem'])): ?>
-                                <img src="<?= htmlspecialchars($denuncia['imagem']) ?>" alt="Imagem da denúncia" style="max-width: 100px; max-height: 100px;">
-                            <?php else: ?>
-                                Não disponível
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <form method="POST" class="d-inline">
-                                <input type="hidden" name="id_denuncias" value="<?= htmlspecialchars($denuncia['id_denuncias']) ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
-                            <a href="?edit_id=<?= htmlspecialchars($denuncia['id_denuncias']) ?>" class="btn btn-warning btn-sm">Editar</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+     <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg">
+        <table class="min-w-full table-auto">
+            <thead class="bg-blue-600 text-white">
                 <tr>
-                    <td colspan="8" class="text-center">Nenhuma denúncia encontrada.</td>
+                    <th class="px-6 py-3 text-left text-sm font-medium">ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Título</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Descrição</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Categoria</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Localização</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Imagem</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Ações</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="text-gray-700">
+                <?php if (!empty($denuncias)): ?>
+                    <?php foreach ($denuncias as $denuncia): ?>
+                        <tr class="border-t hover:bg-blue-50">
+                            <td class="px-6 py-3"><?= htmlspecialchars($denuncia['id_denuncias']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($denuncia['titulo']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($denuncia['descricao']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($denuncia['categoria']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($denuncia['status']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($denuncia['localizacao'] ?? 'Não informado') ?></td>
+                            <td class="px-6 py-3">
+                                <?php if (!empty($denuncia['imagem'])): ?>
+                                    <img src="<?= htmlspecialchars($denuncia['imagem']) ?>" alt="Imagem da denúncia" style="max-width: 100px; max-height: 100px;">
+                                <?php else: ?>
+                                    Não disponível
+                                <?php endif; ?>
+                            </td>
+                            <td class="px-6 py-3 flex space-x-2">
+                                <form method="POST" class="d-inline">
+                                    <input type="hidden" name="id_denuncias" value="<?= htmlspecialchars($denuncia['id_denuncias']) ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <button type="submit" class="btn text-white bg-red-600 btn-sm">Excluir</button>
+                                </form>
+                                <a href="?edit_id=<?= htmlspecialchars($denuncia['id_denuncias']) ?>" class="btn btn-warning btn-sm">Editar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                    <td colspan="8" class="text-center py-3 text-gray-500">Nenhuma denúncia encontrada.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <a href="index.html" class="btn btn-primary m-3">Voltar</a>
 </div>
 </body>
 </html>

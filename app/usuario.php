@@ -74,72 +74,76 @@ if (isset($_GET['edit_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Usuários</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container mt-5">
-    <h1>Gerenciar Usuários</h1>
+<body class="bg-green-50">
+<div class="container mx-auto mt-5 p-4">
+    <h1 class="text-5xl 15px font-semibold text-green-700 mb-6">Gerenciar Usuários</h1>
 
-    <!-- Formulário de Criação/Edição -->
-    <form method="POST" class="mb-4">
+    <!-- Criação/Edição -->
+    <form method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-lg">
         <input type="hidden" name="action" value="<?= $editData ? 'edit' : 'create' ?>">
         <?php if ($editData): ?>
             <input type="hidden" name="Usuario_id_usuario" value="<?= $editData['Usuario_id_usuario'] ?>">
         <?php endif; ?>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="cpf_usuario" class="form-label">CPF</label>
             <input type="text" class="form-control" id="cpf_usuario" name="cpf_usuario" value="<?= $editData['cpf_usuario'] ?? '' ?>" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="nome_usuario" class="form-label">Nome</label>
             <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" value="<?= $editData['nome_usuario'] ?? '' ?>" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="telefone" class="form-label">Telefone</label>
             <input type="text" class="form-control" id="telefone" name="telefone" value="<?= $editData['telefone'] ?? '' ?>" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="senha" class="form-label">Senha</label>
             <input type="password" class="form-control" id="senha" name="senha" <?= $editData ? '' : 'required' ?>>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn text-white bg-green-600">Salvar</button>
     </form>
 
     <!-- Tabela de Listagem -->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>CPF</th>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($usuarios)): ?>
-                <?php foreach ($usuarios as $usuario): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($usuario['Usuario_id_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['cpf_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['nome_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['telefone']) ?></td>
-                        <td>
-                            <form method="POST" class="d-inline">
-                                <input type="hidden" name="Usuario_id_usuario" value="<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
-                            <a href="?edit_id=<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>" class="btn btn-warning btn-sm">Editar</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg">
+        <table class="min-w-full table-auto">
+            <thead class="bg-green-600 text-white">
                 <tr>
-                    <td colspan="5" class="text-center">Nenhum usuário encontrado.</td>
+                    <th class ="px-6 py-3 text-left text-sm font-medium">ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">CPF</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Nome</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Telefone</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Ações</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="text-gray-700">
+                <?php if (!empty($usuarios)): ?>
+                    <?php foreach ($usuarios as $usuario): ?>
+                        <tr class="border-t hover:bg-green-50">
+                            <td class="px-6 py-3"><?= htmlspecialchars($usuario['Usuario_id_usuario']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($usuario['cpf_usuario']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($usuario['nome_usuario']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($usuario['telefone']) ?></td>
+                            <td class="px-6 py-3 flex space-x-2">
+                                <form method="POST" class="d-inline">
+                                    <input type="hidden" name="Usuario_id_usuario" value="<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <button type="submit" class="btn text-white bg-red-600 btn-sm">Excluir</button>
+                                </form>
+                                <a href="?edit_id=<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>" class="btn text-white bg-yellow-400 btn-sm">Editar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="text-center py-3 text-gray-500">Nenhum usuário encontrado.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <a href="index.html" class="btn text-white bg-green-600 m-3">Voltar</a>
 </div>
 </body>
 </html>
