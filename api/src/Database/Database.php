@@ -128,3 +128,4 @@ class Database {
     echo json_encode(["message" => "Database is ready!"]);
    }
 }
+

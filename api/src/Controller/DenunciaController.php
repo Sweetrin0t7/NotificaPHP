@@ -20,7 +20,7 @@ class DenunciaController
         $method = $request->getMethod();
 
         if ($id) {
-            if (!is_numeric($id)) throw new APIException("Denuncia Id must be a number!", 400);
+            if (!is_numeric($id)) throw new APIException("Denuncia Id precisar ser um número!", 400);
 
             switch ($method) {
                 case "GET":
@@ -65,19 +65,19 @@ class DenunciaController
     private function validateBody(array $body): array
     {
         // Verifica se o título foi informado
-        if (!isset($body["titulo"])) throw new APIException("Property 'titulo' is required!", 400);
+        if (!isset($body["titulo"])) throw new APIException("Propriedade 'titulo' é necessária!", 400);
 
         // Verifica se a descrição foi informada
-        if (!isset($body["descricao"])) throw new APIException("Property 'descricao' is required!", 400);
+        if (!isset($body["descricao"])) throw new APIException("Propriedade 'descricao' é necessária!", 400);
 
         // Verifica se a categoria foi informada
-        if (!isset($body["categoria"])) throw new APIException("Property 'categoria' is required!", 400);
+        if (!isset($body["categoria"])) throw new APIException("Propriedade 'categoria' é necessária!", 400);
 
         // Verifica se o status foi informado
-        if (!isset($body["status"])) throw new APIException("Property 'status' is required!", 400);
+        if (!isset($body["status"])) throw new APIException("Propriedade 'status' é necessária!", 400);
 
         // Verifica se o ID do usuário foi informado
-        if (!isset($body["Usuarios_id_usuario"])) throw new APIException("Property 'Usuarios_id_usuario' is required!", 400);
+        if (!isset($body["Usuarios_id_usuario"])) throw new APIException("Propriedade 'Usuarios_id_usuario' é necessária!", 400);
 
         // Cria um array com os dados da denúncia
         $denuncia = [
