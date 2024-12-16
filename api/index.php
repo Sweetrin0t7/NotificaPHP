@@ -47,3 +47,4 @@ if (isset($_SERVER['REQUEST_URI']) && ($_SERVER['REQUEST_URI'] === '/api' || $_S
             throw new APIException("Recurso não encontrado!", 404);
     }
 }
+
