@@ -3,7 +3,7 @@ namespace Model;
 
 class Usuario implements \JsonSerializable {
 
-    private int $Usuario_id_usuario;
+    private ?int $Usuario_id_usuario;
     private string $cpf_usuario;
 
     private string $nome_usuario;
