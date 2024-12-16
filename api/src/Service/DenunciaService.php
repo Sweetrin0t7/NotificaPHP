@@ -18,7 +18,7 @@ class DenunciaService
     function getDenuncias(?string $titulo): array
     {
         if ($titulo) {
-            if ($titulo === "") throw new APIException("Invalid search parameter!", 400);
+            if ($titulo === "") throw new APIException("Parametros de busca invalidos!", 400);
             return $this->repository->findByTitulo($titulo);
         } else {
             return $this->repository->findAll();
@@ -28,7 +28,7 @@ class DenunciaService
     function getDenunciaById(int $id): Denuncia
     {
         $denuncia = $this->repository->findById($id);
-        if (!$denuncia) throw new APIException("Denuncia not found!", 404);
+        if (!$denuncia) throw new APIException("Denuncia nao encontrada!", 404);
         return $denuncia;
     }
 
@@ -74,11 +74,11 @@ class DenunciaService
 
     private function validateDenuncia(Denuncia $denuncia)
     {
-        if (strlen($denuncia->getTitulo()) < 5) throw new APIException("Invalid titulo!", 400);
-        if (strlen($denuncia->getDescricao()) < 10) throw new APIException("Descricao must have at least 10 characters!", 400);
-        if (strlen($denuncia->getCategoria()) < 3) throw new APIException("Categoria must have at least 3 characters!", 400);
+        if (strlen($denuncia->getTitulo()) < 5) throw new APIException("Titulo inválido!", 400);
+        if (strlen($denuncia->getDescricao()) < 10) throw new APIException("Descricao precisa ter no minimo 10 caracteres!", 400);
+        if (strlen($denuncia->getCategoria()) < 3) throw new APIException("Categoria precisa ter no minimo 3 caracteres!", 400);
         if (!in_array($denuncia->getStatus(), ["Pendente", "Em andamento", "Resolvido"])) {
-            throw new APIException("Invalid status! Accepted values: 'Pendente', 'Em andamento', 'Resolvido'.", 400);
+            throw new APIException("Status inválido! Valores aceitos: 'Pendente', 'Em andamento', 'Resolvido'.", 400);
         }
     }
 
