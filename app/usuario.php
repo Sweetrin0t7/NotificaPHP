@@ -1,4 +1,5 @@
 <?php
+// Função para chamar a API
 function callApi(string $method, string $url, array $data = []): array {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -16,57 +17,81 @@ function callApi(string $method, string $url, array $data = []): array {
     return ['data' => json_decode($response, true), 'http_code' => $httpCode];
 }
 
+// URL da API
 $apiUrl = "http://localhost/NotificaPHP/api/usuarios";
 
-// Tratamento de POST para criação e edição
+// Processamento de POST para criação e edição
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action']) && $_POST['action'] === 'create') {
-        $data = [
-            'cpf_usuario' => $_POST['cpf_usuario'] ?? '',
-            'nome_usuario' => $_POST['nome_usuario'] ?? '',
-            'telefone' => $_POST['telefone'] ?? '',
-            'senha' => $_POST['senha'] ?? '',
-        ];
+    if (isset($_POST['action'])) {
+        // Criação de usuário
+        if ($_POST['action'] === 'create') {
+            $data = [
+                'cpf_usuario' => $_POST['cpf_usuario'] ?? '',
+                'nome_usuario' => $_POST['nome_usuario'] ?? '',
+                'telefone' => $_POST['telefone'] ?? '',
+                'senha' => $_POST['senha'] ?? '',
+            ];
 
-        $response = callApi('POST', $apiUrl, $data);
-        echo '<pre>Resposta da API: ';
+            $response = callApi('POST', $apiUrl, $data);
+
+            // Tratamento da resposta
+            if ($response['http_code'] == 200) {
+                echo '<div class="alert alert-success">Usuário criado com sucesso!</div>';
+            } else {
+                echo '<div class="alert alert-danger">Erro ao criar usuário. Tente novamente.</div>';
+            }
+
+        // Edição de usuário
+        } elseif ($_POST['action'] === 'edit' && isset($_POST['Usuario_id_usuario'])) {
+            $data = [
+                'cpf_usuario' => $_POST['cpf_usuario'] ?? '',
+                'nome_usuario' => $_POST['nome_usuario'] ?? '',
+                'telefone' => $_POST['telefone'] ?? '',
+                'senha' => $_POST['senha'] ?? '',
+            ];
+
+            $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
+
+            // Tratamento da resposta
+            if ($response['http_code'] == 200) {
+                echo '<div class="alert alert-success">Usuário editado com sucesso!</div>';
+            } else {
+                echo '<div class="alert alert-danger">Erro ao editar usuário. Tente novamente.</div>';
+            }
+
+            $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
+        echo '<pre>';
+        echo "Dados enviados para a API:\n";
+        print_r($data);
+        echo "\nResposta da API:\n";
         print_r($response);
         echo '</pre>';
-
-    } elseif (isset($_POST['action']) && $_POST['action'] === 'edit' && isset($_POST['Usuario_id_usuario'])) {
-        $data = [
-            'cpf_usuario' => $_POST['cpf_usuario'] ?? '',
-            'nome_usuario' => $_POST['nome_usuario'] ?? '',
-            'telefone' => $_POST['telefone'] ?? '',
-            'senha' => $_POST['senha'] ?? '',
-        ];
-
-        $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
-        echo '<pre>Resposta da API: ';
-        print_r($response);
-        echo '</pre>';
+        }
     }
 }
 
-// DELETE
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-    if (isset($_POST['Usuario_id_usuario'])) {
-        $response = callApi('DELETE', "$apiUrl/{$_POST['Usuario_id_usuario']}");
+// Deletar usuário
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['Usuario_id_usuario'])) {
+    $response = callApi('DELETE', "$apiUrl/{$_POST['Usuario_id_usuario']}");
+
+    if ($response['http_code'] == 200) {
+        echo '<div class="alert alert-success">Usuário deletado com sucesso!</div>';
+    } else {
+        echo '<div class="alert alert-danger">Erro ao deletar usuário. Tente novamente.</div>';
     }
 }
 
-// Listar usuários
+// Listar usuários (GET)
 $response = callApi('GET', $apiUrl);
 $usuarios = $response['http_code'] === 200 ? $response['data'] : [];
 
-// Preencher o formulário com dados para edição
+// Preencher o formulário de edição
 $editData = null;
 if (isset($_GET['edit_id'])) {
     $editResponse = callApi('GET', "$apiUrl/{$_GET['edit_id']}");
     $editData = $editResponse['data'] ?? null;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,9 +154,9 @@ if (isset($_GET['edit_id'])) {
                                 <form method="POST" class="d-inline">
                                     <input type="hidden" name="Usuario_id_usuario" value="<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>">
                                     <input type="hidden" name="action" value="delete">
-                                    <button type="submit" class="btn text-white bg-red-600 btn-sm">Excluir</button>
+                                    <button type="submit" class="btn text-white bg-red-600 hover:bg-red-800 btn-sm">Excluir</button>
                                 </form>
-                                <a href="?edit_id=<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>" class="btn text-white bg-yellow-400 btn-sm">Editar</a>
+                                <a href="?edit_id=<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>" class="btn text-white bg-yellow-400 hover:bg-yellow-600 btn-sm">Editar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

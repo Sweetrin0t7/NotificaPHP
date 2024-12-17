@@ -175,8 +175,44 @@ if (isset($_GET['edit_id'])) {
         <button type="submit" class="btn text-white bg-blue-600 px-6 py-3 rounded-md">Salvar</button>
     </form>
 
+        <!-- Formulário de Filtro -->
+    <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg p-4">
+        <form method="GET" action="denuncia.php" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700">Status:</label>
+                    <select name="status" id="status" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="" <?= empty($_GET['status']) ? 'selected' : '' ?>>Todos</option>
+                        <option value="Pendente" <?= $_GET['status'] === 'pendente' ? 'selected' : '' ?>>Pendente</option>
+                        <option value="Em Andamento" <?= $_GET['status'] === 'em andamento' ? 'selected' : '' ?>>Em Andamento</option>
+                        <option value="Resolvido" <?= $_GET['status'] === 'resolvido' ? 'selected' : '' ?>>Resolvido</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="usuario" class="block text-sm font-medium text-gray-700">Usuário:</label>
+                    <input type="text" name="usuario" id="usuario" placeholder="Digite o nome do usuário" value="<?= htmlspecialchars($_GET['usuario'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="data_inicio" class="block text-sm font-medium text-gray-700">Data Início:</label>
+                    <input type="date" name="data_inicio" id="data_inicio" value="<?= htmlspecialchars($_GET['data_inicio'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="data_fim" class="block text-sm font-medium text-gray-700">Data Fim:</label>
+                    <input type="date" name="data_fim" id="data_fim" value="<?= htmlspecialchars($_GET['data_fim'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+
+            <button type="submit" class="mt-3 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Filtrar
+            </button>
+        </form>
+    </div>
+
     <!-- Tabela de Listagem -->
-     <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg">
+    <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg">
         <table class="min-w-full table-auto">
             <thead class="bg-blue-600 text-white">
                 <tr>
@@ -211,19 +247,20 @@ if (isset($_GET['edit_id'])) {
                                 <form method="POST" class="d-inline">
                                     <input type="hidden" name="id_denuncias" value="<?= htmlspecialchars($denuncia['id_denuncias']) ?>">
                                     <input type="hidden" name="action" value="delete">
-                                    <button type="submit" class="btn text-white bg-red-600 btn-sm">Excluir</button>
+                                    <button type="submit" class="btn text-white bg-red-600 hover:bg-red-800 btn-sm">Excluir</button>
                                 </form>
-                                <a href="?edit_id=<?= htmlspecialchars($denuncia['id_denuncias']) ?>" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="?edit_id=<?= htmlspecialchars($denuncia['id_denuncias']) ?>" class="btn btn-warning hover:bg-yellow-600 btn-sm">Editar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                    <td colspan="8" class="text-center py-3 text-gray-500">Nenhuma denúncia encontrada.</td>
+                        <td colspan="8" class="text-center py-3 text-gray-500">Nenhuma denúncia encontrada.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
     </div>
     <a href="index.html" class="btn btn-primary m-3">Voltar</a>
 </div>
