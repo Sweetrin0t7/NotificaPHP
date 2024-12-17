@@ -10,9 +10,9 @@ class Apresentacao {
             'rotas' => [
                 'GET /api/denuncias',  //Listagem
                 'POST /api/denuncias', //Criar
-                'GET /api/denuncia/:id',  //Listar ID
+                'GET /api/denuncias/:id',  //Listar ID
                 'POST /api/denuncias/:id', //Editar ID
-                'DELETE /api/denuncia/:id',
+                'DELETE /api/denuncias/:id',
                 'GET /api/denuncias?status={status}', //Filtrar status
                 'GET /api/denuncias?titulo={titulo}', //Filtrar titulo
                 'GET /api/usuarios', //Listagem
