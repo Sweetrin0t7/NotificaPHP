@@ -2,16 +2,8 @@ Em relação à API:
 
 --------------------------A FAZER:
 
-- Deve implementar apenas dois tipos de rotas, como por exemplo:
-  /api/clientes para todo o conjunto de clientes
-  /api/clientes/123 para um cliente específico
 
 - Deve utilizar a reescrita de URLs e fazer o roteamento adequado;
-
-- Deve validar dados e tratar erros, devolvendo a resposta adequada:
-  Tratar rotas inexistes e métodos não permitidos;
-  Validar as requisições recebidas (no controller);
-  Validar as regras de negócio (no service);
 
 
 - Deve implementar rotas com GET, POST, PUT, PATCH e DELETE;
@@ -21,6 +13,17 @@ Em relação à API:
 --------------------------FEITO:
 
 - Deve utilizar Orientação a Objetos;
+
+
+- Deve implementar apenas dois tipos de rotas, como por exemplo:
+  /api/clientes para todo o conjunto de clientes
+  /api/clientes/123 para um cliente específico
+
+
+- Deve validar dados e tratar erros, devolvendo a resposta adequada:
+  Tratar rotas inexistes e métodos não permitidos;
+  Validar as requisições recebidas (no controller);
+  Validar as regras de negócio (no service);
 
 - Deve responder sempre em JSON, com o código de status HTTP adequado;
 
