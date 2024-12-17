@@ -2,8 +2,6 @@ Em relação à API:
 
 --------------------------A FAZER:
 
-- Deve utilizar Orientação a Objetos;
-
 - Deve implementar apenas dois tipos de rotas, como por exemplo:
   /api/clientes para todo o conjunto de clientes
   /api/clientes/123 para um cliente específico
@@ -15,13 +13,16 @@ Em relação à API:
   Validar as requisições recebidas (no controller);
   Validar as regras de negócio (no service);
 
-- Deve responder sempre em JSON, com o código de status HTTP adequado;
 
 - Deve implementar rotas com GET, POST, PUT, PATCH e DELETE;
   Para as rotas que retornam conjuntos de registros, a requisição GET deve permitir a filtragem dos dados;
   No caso de PUT, POST e PATCH, os dados devem ser enviados no corpo da requisição em formato JSON;
 
 --------------------------FEITO:
+
+- Deve utilizar Orientação a Objetos;
+
+- Deve responder sempre em JSON, com o código de status HTTP adequado;
 
 - Deve implementar o padrão Controller – Service – Repository; (Renata/Alessandra)
 
