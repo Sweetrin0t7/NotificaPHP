@@ -1,4 +1,5 @@
 <?php
+$message = '';
 function callApi(string $method, string $url, array $data = []): array {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -35,7 +36,9 @@ function callApi(string $method, string $url, array $data = []): array {
     return ['data' => json_decode($response, true), 'http_code' => $httpCode];
 }
 
-$apiUrl = "http://localhost/NotificaPHP/api/denuncias";
+//$apiUrl = "http://localhost/NotificaPHP/api/denuncias";]
+
+$apiUrl = "http://localhost/api/denuncias";
 
 // Tratamento de POST para criação e edição
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -58,12 +61,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $response = callApi('POST', $apiUrl, $data);
-        echo '<pre>';
-        echo "Dados enviados para a API:\n";
-        print_r($data);
-        echo "\nResposta da API:\n";
-        print_r($response);
-        echo '</pre>';
+        if ($response['http_code'] === 201) {
+            $message = 'Denúncia criada com sucesso!';
+        } else {
+            $message = 'Erro ao criar denúncia. Tente novamente. ' . $response['data']['message'];
+        }
+
+        // echo '<pre>';
+        // echo "Dados enviados para a API:\n";
+        // print_r($data);
+        // echo "\nResposta da API:\n";
+        // print_r($response);
+        // echo '</pre>';
 
     } elseif (isset($_POST['action']) && $_POST['action'] === 'edit' && isset($_POST['id_denuncias'])) {
         $data = [
@@ -84,12 +93,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $response = callApi('PUT', "$apiUrl/{$_POST['id_denuncias']}", $data);
-        echo '<pre>';
-        echo "Dados enviados para a API:\n";
-        print_r($data);
-        echo "\nResposta da API:\n";
-        print_r($response);
-        echo '</pre>';
+        if ($response['http_code'] === 200) {
+            $message = 'Denúncia editada com sucesso!';
+        } else {
+            $message = 'Erro ao editar denúncia. ' . $response['data']['message'];
+        }
+
+        // echo '<pre>';
+        // echo "Dados enviados para a API:\n";
+        // print_r($data);
+        // echo "\nResposta da API:\n";
+        // print_r($response);
+        // echo '</pre>';
     }
 }
 
@@ -98,10 +113,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     if (isset($_POST['id_denuncias'])) {
         $response = callApi('DELETE', "$apiUrl/{$_POST['id_denuncias']}");
     }
+    if ($response['http_code'] === 204) {
+        $message = 'Denúncia excluída com sucesso!';
+    } else {
+        $message = 'Erro ao excluír denúncia. ' . $response['data']['message'];
+    }
 }
 
-// Listar denúncias
-$response = callApi('GET', $apiUrl);
+// Criando a URL com os parâmetros de filtro
+$queryParams = [];
+if (!empty($_GET['status'])) {
+    $queryParams['status'] = $_GET['status'];
+}
+if (!empty($_GET['titulo'])) {
+    $queryParams['titulo'] = $_GET['titulo'];
+}
+
+$apiUrlWithFilters = $apiUrl . '?' . http_build_query($queryParams);
+
+$response = callApi('GET', $apiUrlWithFilters);
 $denuncias = $response['http_code'] === 200 ? $response['data'] : [];
 
 // Preencher o formulário com dados para edição
@@ -125,12 +155,20 @@ if (isset($_GET['edit_id'])) {
 <div class="container mx-auto mt-5 p-4">
     <h1 class="text-5xl font-semibold text-blue-700 mb-6">Gerenciar Denúncias</h1>
 
+    <!-- Exibir Mensagem da API -->
+    <?php if (!empty($message)): ?>
+        <div class="alert <?= strpos($message, 'Erro') !== false ? 'alert-danger' : 'alert-success' ?>" role="alert">
+            <?= htmlspecialchars($message) ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Formulário de Criação/Edição -->
     <form method="POST" enctype="multipart/form-data" class="space-y-4 bg-white p-6 rounded-lg shadow-lg">
         <input type="hidden" name="action" value="<?= $editData ? 'edit' : 'create' ?>">
         <?php if ($editData): ?>
             <input type="hidden" name="id_denuncias" value="<?= $editData['id_denuncias'] ?>">
         <?php endif; ?>
+        
         <div class="mb-4">
             <label for="titulo" class="form-label">Título</label>
             <input type="text" class="form-control" id="titulo" name="titulo" value="<?= $editData['titulo'] ?? '' ?>" required>
@@ -176,32 +214,22 @@ if (isset($_GET['edit_id'])) {
     </form>
 
         <!-- Formulário de Filtro -->
-    <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg p-4">
+        <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg p-4">
         <form method="GET" action="denuncia.php" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700">Status:</label>
                     <select name="status" id="status" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="" <?= empty($_GET['status']) ? 'selected' : '' ?>>Todos</option>
-                        <option value="Pendente" <?= $_GET['status'] === 'pendente' ? 'selected' : '' ?>>Pendente</option>
-                        <option value="Em Andamento" <?= $_GET['status'] === 'em andamento' ? 'selected' : '' ?>>Em Andamento</option>
-                        <option value="Resolvido" <?= $_GET['status'] === 'resolvido' ? 'selected' : '' ?>>Resolvido</option>
+                        <option value="Pendente" <?= $_GET['status'] === 'Pendente' ? 'selected' : '' ?>>Pendente</option>
+                        <option value="Em Andamento" <?= $_GET['status'] === 'Em Andamento' ? 'selected' : '' ?>>Em Andamento</option>
+                        <option value="Resolvido" <?= $_GET['status'] === 'Resolvido' ? 'selected' : '' ?>>Resolvido</option>
                     </select>
                 </div>
 
                 <div>
-                    <label for="usuario" class="block text-sm font-medium text-gray-700">Usuário:</label>
-                    <input type="text" name="usuario" id="usuario" placeholder="Digite o nome do usuário" value="<?= htmlspecialchars($_GET['usuario'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-
-                <div>
-                    <label for="data_inicio" class="block text-sm font-medium text-gray-700">Data Início:</label>
-                    <input type="date" name="data_inicio" id="data_inicio" value="<?= htmlspecialchars($_GET['data_inicio'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-
-                <div>
-                    <label for="data_fim" class="block text-sm font-medium text-gray-700">Data Fim:</label>
-                    <input type="date" name="data_fim" id="data_fim" value="<?= htmlspecialchars($_GET['data_fim'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <label for="titulo" class="block text-sm font-medium text-gray-700">Título:</label>
+                    <input type="text" name="titulo" id="titulo" placeholder="Digite o título" value="<?= htmlspecialchars($_GET['titulo'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 </div>
             </div>
 

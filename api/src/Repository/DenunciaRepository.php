@@ -37,31 +37,56 @@ class DenunciaRepository {
       return $denuncias;
    }
 
-   public function findByTitulo(string $titulo): array {
-      $stmt = $this->connection->prepare("SELECT * FROM denuncias 
-                                          WHERE titulo LIKE :titulo");
-      $stmt->bindValue(':titulo', '%' . $titulo . '%');
+   public function findDenuncias(
+      ?string $titulo = null, 
+      ?string $status = null, 
+      ?string $usuario = null, 
+      ?string $data_inicio = null, 
+      ?string $data_fim = null
+  ): array {
+      $query = "SELECT * FROM denuncias WHERE 1";
+      $params = [];
+  
+      // Filtro de título
+      if ($titulo) {
+         $query .= " AND titulo LIKE :titulo";
+         $params[':titulo'] = '%' . $titulo . '%';
+      }
+  
+      // Filtro de status
+      if ($status) {
+          $query .= " AND status = :status";
+          $params[':status'] = $status;
+      }
+  
+      $stmt = $this->connection->prepare($query);
+      
+      foreach ($params as $key => $value) {
+          $stmt->bindValue($key, $value);
+      }
+  
       $stmt->execute();
-
+  
       $denuncias = [];
       while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-         $denuncia = new Denuncia(
-            id_denuncias: $row['id_denuncias'],
-            titulo: $row['titulo'],
-            descricao: $row['descricao'],
-            categoria: $row['categoria'],
-            status: $row['status'],
-            anonimo: (bool) $row['anonimo'],
-            imagem: $row['imagem'],
-            data_criacao: $row['data_criacao'],
-            localizacao: $row['localizacao'],
-            Usuarios_id_usuario: $row['Usuarios_id_usuario']
-         );
-         $denuncias[] = $denuncia;
+          $denuncia = new Denuncia(
+              id_denuncias: $row['id_denuncias'],
+              titulo: $row['titulo'],
+              descricao: $row['descricao'],
+              categoria: $row['categoria'],
+              status: $row['status'],
+              anonimo: (bool) $row['anonimo'],
+              imagem: $row['imagem'],
+              data_criacao: $row['data_criacao'],
+              localizacao: $row['localizacao'],
+              Usuarios_id_usuario: $row['Usuarios_id_usuario']
+          );
+          $denuncias[] = $denuncia;
       }
-
+  
       return $denuncias;
-   }
+  }
+  
 
    public function findById(int $id_denuncias): ?Denuncia {
       $stmt = $this->connection->prepare("SELECT * FROM denuncias 

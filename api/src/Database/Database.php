@@ -101,8 +101,8 @@ class Database {
 
       // Inserir uma denúncia com imagem em Base64
       $denuncias = [
-          ["titulo" => "Falta de água", "descricao" => "Não há fornecimento de água no bairro.", "categoria" => "agua", "imagem" => $imagemBase64agua, "localizacao" => "Rua A, Bairro X", "status" => "pendente", "anonimo" => 0, "Usuarios_id_usuario" => 1],
-          ["titulo" => "Buraco na rua", "descricao" => "Um grande buraco está atrapalhando o trânsito.", "categoria" => "obras", "imagem" => $imagemBase64buraco, "localizacao" => "Rua B, Bairro Y", "status" => "em andamento", "anonimo" => 1, "Usuarios_id_usuario" => 2],
+          ["titulo" => "Falta de água", "descricao" => "Não há fornecimento de água no bairro.", "categoria" => "Água", "imagem" => $imagemBase64agua, "localizacao" => "Rua A, Bairro X", "status" => "Pendente", "anonimo" => 0, "Usuarios_id_usuario" => 1],
+          ["titulo" => "Buraco na rua", "descricao" => "Um grande buraco está atrapalhando o trânsito.", "categoria" => "Obras", "imagem" => $imagemBase64buraco, "localizacao" => "Rua B, Bairro Y", "status" => "Em Andamento", "anonimo" => 1, "Usuarios_id_usuario" => 2],
       ];
 
       $stmt = $connection->prepare("INSERT INTO denuncias (titulo, descricao, categoria, imagem, localizacao, status, anonimo, Usuarios_id_usuario) 

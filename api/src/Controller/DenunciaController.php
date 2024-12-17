@@ -46,7 +46,9 @@ class DenunciaController
                 case "GET":
                     // Obtém parâmetros de busca da querystring (se houver)
                     $titulo = $request->getQueryParams()["titulo"] ?? null;
-                    $response = $this->service->getDenuncias($titulo);
+                    $status = $request->getQueryParams()["status"] ?? null;
+
+                    $response = $this->service->getDenuncias($titulo, $status);
                     echo json_encode($response);
                     break;
                 case "POST":

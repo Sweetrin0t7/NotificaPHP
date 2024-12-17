@@ -17,8 +17,9 @@ function callApi(string $method, string $url, array $data = []): array {
     return ['data' => json_decode($response, true), 'http_code' => $httpCode];
 }
 
-// URL da API
-$apiUrl = "http://localhost/NotificaPHP/api/usuarios";
+// URL da API]
+$apiUrl = "http://localhost/api/usuarios";
+//$apiUrl = "http://localhost/NotificaPHP/api/usuarios";
 
 // Processamento de POST para criação e edição
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

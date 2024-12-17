@@ -15,14 +15,12 @@ class DenunciaService
         $this->repository = new DenunciaRepository();
     }
 
-    function getDenuncias(?string $titulo): array
+    function getDenuncias(?string $titulo, ?string $status = null): array
     {
-        if ($titulo) {
-            if ($titulo === "") throw new APIException("Parametros de busca invalidos!", 400);
-            return $this->repository->findByTitulo($titulo);
-        } else {
-            return $this->repository->findAll();
-        }
+        return $this->repository->findDenuncias(
+            titulo: $titulo, 
+            status: $status, 
+        );
     }
 
     function getDenunciaById(int $id): Denuncia
