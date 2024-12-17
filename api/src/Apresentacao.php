@@ -20,9 +20,6 @@ class Apresentacao {
                 'GET /api/usuarios/:id',// Listar ID
                 'PUT /api/usuarios/:id', //Editar ID
                 'DELETE /api/usuarios/:id', //Delete ID
-                'GET /api/usuarios?nome_usuario={nome_usuario}', //Filtrar nome
-                'GET /api/usuarios?cpf_usuario={cpf_usuario}', //Filtrar cpf
-                'GET /api/usuarios?telefone={telefone}', //Filtrar telefone
                 'GET /api/db',
                 'GET /api' 
             ]
