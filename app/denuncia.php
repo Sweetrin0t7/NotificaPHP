@@ -37,7 +37,6 @@ function callApi(string $method, string $url, array $data = []): array {
 }
 
 //$apiUrl = "http://localhost/NotificaPHP/api/denuncias";]
-
 $apiUrl = "http://localhost/api/denuncias";
 
 // Tratamento de POST para criação e edição

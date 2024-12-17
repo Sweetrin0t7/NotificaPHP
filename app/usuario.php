@@ -17,9 +17,10 @@ function callApi(string $method, string $url, array $data = []): array {
     return ['data' => json_decode($response, true), 'http_code' => $httpCode];
 }
 
-// URL da API]
+// URL da API
 $apiUrl = "http://localhost/api/usuarios";
 //$apiUrl = "http://localhost/NotificaPHP/api/usuarios";
+
 
 // Processamento de POST para criação e edição
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,13 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $response = callApi('POST', $apiUrl, $data);
 
-            // Tratamento da resposta
-            if ($response['http_code'] == 200) {
-                echo '<div class="alert alert-success">Usuário criado com sucesso!</div>';
-            } else {
-                echo '<div class="alert alert-danger">Erro ao criar usuário. Tente novamente.</div>';
-            }
-
         // Edição de usuário
         } elseif ($_POST['action'] === 'edit' && isset($_POST['Usuario_id_usuario'])) {
             $data = [
@@ -53,14 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
 
-            // Tratamento da resposta
-            if ($response['http_code'] == 200) {
-                echo '<div class="alert alert-success">Usuário editado com sucesso!</div>';
-            } else {
-                echo '<div class="alert alert-danger">Erro ao editar usuário. Tente novamente.</div>';
-            }
-
-            $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
+        // Debug
         echo '<pre>';
         echo "Dados enviados para a API:\n";
         print_r($data);
@@ -75,12 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['Usuario_id_usuario'])) {
     $response = callApi('DELETE', "$apiUrl/{$_POST['Usuario_id_usuario']}");
 
-    if ($response['http_code'] == 200) {
-        echo '<div class="alert alert-success">Usuário deletado com sucesso!</div>';
-    } else {
-        echo '<div class="alert alert-danger">Erro ao deletar usuário. Tente novamente.</div>';
+    // Debug
+    echo '<pre>';
+    echo "\nResposta da API:\n";
+    print_r($response);
+    echo '</pre>';
     }
-}
 
 // Listar usuários (GET)
 $response = callApi('GET', $apiUrl);
@@ -114,22 +101,58 @@ if (isset($_GET['edit_id'])) {
         <?php endif; ?>
         <div class="mb-4">
             <label for="cpf_usuario" class="form-label">CPF</label>
-            <input type="text" class="form-control" id="cpf_usuario" name="cpf_usuario" value="<?= $editData['cpf_usuario'] ?? '' ?>" required>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="cpf_usuario" 
+                name="cpf_usuario" 
+                value="<?= $editData['cpf_usuario'] ?? '' ?>" 
+                pattern="\d{11}" 
+                title="O CPF deve conter exatamente 11 dígitos numéricos." 
+                required
+            >
         </div>
         <div class="mb-4">
             <label for="nome_usuario" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" value="<?= $editData['nome_usuario'] ?? '' ?>" required>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="nome_usuario" 
+                name="nome_usuario" 
+                value="<?= $editData['nome_usuario'] ?? '' ?>" 
+                minlength="3" 
+                title="O nome deve ter no mínimo 3 caracteres." 
+                required
+            >
         </div>
         <div class="mb-4">
             <label for="telefone" class="form-label">Telefone</label>
-            <input type="text" class="form-control" id="telefone" name="telefone" value="<?= $editData['telefone'] ?? '' ?>" required>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="telefone" 
+                name="telefone" 
+                value="<?= $editData['telefone'] ?? '' ?>" 
+                pattern="\d{11}" 
+                title="O telefone deve conter exatamente 11 dígitos numéricos." 
+                required
+            >
         </div>
         <div class="mb-4">
             <label for="senha" class="form-label">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" <?= $editData ? '' : 'required' ?>>
+            <input 
+                type="password" 
+                class="form-control" 
+                id="senha" 
+                name="senha" 
+                minlength="6" 
+                title="A senha deve ter no mínimo 6 caracteres." 
+                <?= $editData ? '' : 'required' ?>
+            >
         </div>
         <button type="submit" class="btn text-white bg-green-600">Salvar</button>
     </form>
+
 
     <!-- Tabela de Listagem -->
     <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg">
