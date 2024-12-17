@@ -81,5 +81,4 @@ class DenunciaService
             throw new APIException("Status inválido! Valores aceitos: 'Pendente', 'Em andamento', 'Resolvido'.", 400);
         }
     }
-
 }

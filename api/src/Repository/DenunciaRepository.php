@@ -116,7 +116,7 @@ class DenunciaRepository {
                                              imagem = :imagem, 
                                              localizacao = :localizacao, 
                                              Usuarios_id_usuario = :Usuarios_id_usuario
-                                          WHERE id_denuncias = :id_denuncias;");
+                                             WHERE id_denuncias = :id_denuncias;");
       $stmt->bindValue(':id_denuncias', $denuncia->getIdDenuncias(), \PDO::PARAM_INT);                                           
       $stmt->bindValue(':titulo', $denuncia->getTitulo(), \PDO::PARAM_STR);
       $stmt->bindValue(':descricao', $denuncia->getDescricao(), \PDO::PARAM_STR);

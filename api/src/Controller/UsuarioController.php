@@ -64,6 +64,8 @@ class UsuarioController
 
     private function validateBody(array $body): array
     {
+        error_log("Conteúdo do corpo da requisição: " . json_encode($body));
+        
         if (!isset($body["cpf_usuario"])) throw new APIException("Propriedade 'cpf_usuario' é necessária!", 400);
         if (!isset($body["nome_usuario"])) throw new APIException("Propriedade 'nome_usuario' é necessária!!", 400);
         if (!isset($body["telefone"])) throw new APIException("Propriedade 'telefone' é necessária!!", 400);

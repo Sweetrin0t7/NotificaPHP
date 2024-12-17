@@ -98,7 +98,7 @@ class UsuarioRepository {
     public function create(Usuario $usuario): Usuario {
         $stmt = $this->connection->prepare(
             "INSERT INTO usuarios (cpf_usuario, nome_usuario, telefone, senha, tipo_usuario) 
-             VALUES (:cpf_usuario, :nome_usuario, :telefone, :senha, :tipo_usuario)"
+                    VALUES (:cpf_usuario, :nome_usuario, :telefone, :senha, :tipo_usuario)"
         );
         $stmt->bindValue(':cpf_usuario', $usuario->getCpfUsuario(), \PDO::PARAM_STR);
         $stmt->bindValue(':nome_usuario', $usuario->getNomeUsuario(), \PDO::PARAM_STR);
@@ -112,21 +112,20 @@ class UsuarioRepository {
     }
 
     public function update(Usuario $usuario): void {
-        $stmt = $this->connection->prepare(
-            "UPDATE usuarios SET 
-             cpf_usuario = :cpf_usuario,
-             nome_usuario = :nome_usuario,
-             telefone = :telefone,
-             senha = :senha,
-             tipo_usuario = :tipo_usuario
-             WHERE id_usuario = :id_usuario"
+        $stmt = $this->connection->prepare("UPDATE usuarios SET 
+                                            cpf_usuario = :cpf_usuario,
+                                            nome_usuario = :nome_usuario,
+                                            telefone = :telefone,
+                                            senha = :senha,
+                                            tipo_usuario = :tipo_usuario
+                                            WHERE id_usuario = :id_usuario"
         );
-        $stmt->bindValue(':id_usuario', $usuario->getIdUsuario(), \PDO::PARAM_INT);
-        $stmt->bindValue(':cpf_usuario', $usuario->getCpfUsuario(), \PDO::PARAM_STR);
-        $stmt->bindValue(':nome_usuario', $usuario->getNomeUsuario(), \PDO::PARAM_STR);
-        $stmt->bindValue(':telefone', $usuario->getTelefone(), \PDO::PARAM_STR);
-        $stmt->bindValue(':senha', $usuario->getSenha(), \PDO::PARAM_STR);
-        $stmt->bindValue(':tipo_usuario', $usuario->getTipoUsuario(), \PDO::PARAM_STR);
+        $stmt->bindValue(':id_usuario', $usuario->getIdUsuario(), PDO::PARAM_INT);
+        $stmt->bindValue(':cpf_usuario', $usuario->getCpfUsuario(), PDO::PARAM_STR);
+        $stmt->bindValue(':nome_usuario', $usuario->getNomeUsuario(), PDO::PARAM_STR);
+        $stmt->bindValue(':telefone', $usuario->getTelefone(), PDO::PARAM_STR);
+        $stmt->bindValue(':senha', $usuario->getSenha(), PDO::PARAM_STR);
+        $stmt->bindValue(':tipo_usuario', $usuario->getTipoUsuario(), PDO::PARAM_STR);
         $stmt->execute();
     }
 

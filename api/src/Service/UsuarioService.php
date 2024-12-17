@@ -42,7 +42,7 @@ function getUsuarios(?string $nome_usuario): array
             cpf_usuario: $cpf_usuario,
             nome_usuario: trim($nome_usuario),
             telefone: $telefone,
-            senha: password_hash(trim($senha), PASSWORD_BCRYPT),
+            senha: trim($senha),
             data_cadastro: null,
             tipo_usuario: 'comum' // Tipo padrão é o 'comun'
         );
@@ -55,9 +55,7 @@ function getUsuarios(?string $nome_usuario): array
     {
         $usuario = $this->getUsuarioById($id);
         $usuario->setNomeUsuario(trim($nome_usuario));
-        if ($senha) {
-            $usuario->setSenha(password_hash(trim($senha), PASSWORD_BCRYPT));
-        }
+        $usuario->setSenha(trim($senha));
         $usuario->setTelefone($telefone);
 
         $this->validateUsuario($usuario);
@@ -81,8 +79,8 @@ function getUsuarios(?string $nome_usuario): array
         if (!preg_match('/^\d{11}$/', $usuario->getCpfUsuario())) {
             throw new APIException("CPF deve ter 11 números!", 400);
         }
-        if (!preg_match('/^\d{15}$/', $usuario->getTelefone())) {
-            throw new APIException("Telefone deve ter 15 números!, incluindo o DDD", 400);
+        if (!preg_match('/^\d{11}$/', $usuario->getTelefone())) {
+            throw new APIException("Telefone deve ter 11 números!", 400);
         }
         $tiposValidos = ['comum', 'admin'];
         if (!in_array($usuario->getTipoUsuario(), $tiposValidos)) {
