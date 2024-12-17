@@ -3,7 +3,7 @@ namespace Model;
 
 class Usuario implements \JsonSerializable {
 
-    private ?int $Usuario_id_usuario;
+    private ?int $id_usuario;
     private string $cpf_usuario;
 
     private string $nome_usuario;
@@ -13,7 +13,7 @@ class Usuario implements \JsonSerializable {
     private string $tipo_usuario; // Enum: 'comum', 'admin'
 
     public function __construct(
-        ?int $Usuario_id_usuario = null,
+        ?int $id_usuario = null,
         string $cpf_usuario,
         string $nome_usuario,
         string $telefone,
@@ -21,7 +21,7 @@ class Usuario implements \JsonSerializable {
         string $data_cadastro = null,
         string $tipo_usuario
     ){
-        $this->Usuario_id_usuario = $Usuario_id_usuario;
+        $this->id_usuario = $id_usuario;
         $this->cpf_usuario = $cpf_usuario;
         $this->nome_usuario = $nome_usuario;
         $this->telefone = $telefone;
@@ -31,7 +31,7 @@ class Usuario implements \JsonSerializable {
     }
 
     public function getIdUsuario() : int { 
-        return $this->Usuario_id_usuario;
+        return $this->id_usuario;
     }
 
     public function getCpfUsuario() : string {
@@ -58,8 +58,8 @@ class Usuario implements \JsonSerializable {
         return $this->tipo_usuario;
     }
 
-    public function setIdUsuario(int $Usuario_id_usuario) : void {
-        $this->Usuario_id_usuario = $Usuario_id_usuario;
+    public function setIdUsuario(int $id_usuario) : void {
+        $this->id_usuario = $id_usuario;
     }
 
     public function setCpfUsuario(string $cpf_usuario) : void {

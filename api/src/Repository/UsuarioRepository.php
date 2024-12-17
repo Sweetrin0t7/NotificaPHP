@@ -21,7 +21,7 @@ class UsuarioRepository {
         $usuarios = [];
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $usuario = new Usuario(
-                Usuario_id_usuario: $row['id_usuario'],
+                id_usuario: $row['id_usuario'],
                 cpf_usuario: $row['cpf_usuario'],
                 nome_usuario: $row['nome_usuario'],
                 telefone: $row['telefone'],
@@ -73,7 +73,7 @@ class UsuarioRepository {
         $usuarios = [];
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $usuario = new Usuario(
-                Usuario_id_usuario: $row['id_usuario'],
+                id_usuario: $row['id_usuario'],
                 cpf_usuario: $row['cpf_usuario'],
                 nome_usuario: $row['nome_usuario'],
                 telefone: $row['telefone'],
@@ -96,7 +96,7 @@ class UsuarioRepository {
         if (!$row) return null;
 
         return new Usuario(
-            Usuario_id_usuario: $row['id_usuario'],
+            id_usuario: $row['id_usuario'],
             cpf_usuario: $row['cpf_usuario'],
             nome_usuario: $row['nome_usuario'],
             telefone: $row['telefone'],

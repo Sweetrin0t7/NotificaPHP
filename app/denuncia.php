@@ -1,7 +1,4 @@
 <?php
-//DOMPDF
-//require_once __DIR__ . '/dompdf/autoload.inc.php';
-//use Dompdf\Dompdf;
 
 $message = '';
 function callApi(string $method, string $url, array $data = []): array {
@@ -315,9 +312,10 @@ if (isset($_GET['edit_id'])) {
             </tbody>
         </table>
     </div>
+    <div>
     <a href="DenunciaPDF.php" class="btn btn-primary m-3">Gerar PDF</a>
-    </div>
     <a href="index.html" class="btn btn-primary m-3">Voltar</a>
+</div>
 </div>
 </body>
 </html>

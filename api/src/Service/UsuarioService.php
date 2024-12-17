@@ -49,11 +49,12 @@ function getUsuarios(?string $nome_usuario, ?string $cpf = null, ?string $telefo
         return $this->repository->create($usuario);
     }
 
-    function updateUsuario(int $id, string $nome_usuario, ?string $senha = null, ?string $telefone = null): Usuario
+    function updateUsuario(int $id, string $nome_usuario,string $cpf_usuario, ?string $senha = null, ?string $telefone = null): Usuario
     {
         $usuario = $this->getUsuarioById($id);
-        $usuario->setNomeUsuario(trim($nome_usuario));
-        $usuario->setSenha(trim($senha));
+        $usuario->setNomeUsuario($nome_usuario);
+        $usuario->setSenha($senha);
+        $usuario->setCpfUsuario($cpf_usuario);
         $usuario->setTelefone($telefone);
 
         $this->validateUsuario($usuario);

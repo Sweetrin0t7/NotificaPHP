@@ -44,7 +44,6 @@ class DenunciaController
         } else {
             switch ($method) {
                 case "GET":
-                    // Obtém parâmetros de busca da querystring (se houver)
                     $titulo = $request->getQueryParams()["titulo"] ?? null;
                     $status = $request->getQueryParams()["status"] ?? null;
 

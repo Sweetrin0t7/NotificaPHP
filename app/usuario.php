@@ -35,14 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             $response = callApi('POST', $apiUrl, $data);
+            echo '<pre>';
+            echo "Dados enviados para a API:\n";
+            print_r($data);
+            echo "\nResposta da API:\n";
+            print_r($response);
+            echo '</pre>';
             if ($response['http_code'] === 201) {
-                $message = 'Usuário criada com sucesso!';
+                $message = 'Usuário criado com sucesso!';
             } else {
                 $message = 'Erro ao criar usuário. Tente novamente. ' . $response['data']['message'];
             }
 
         // Edição de usuário
-        } elseif ($_POST['action'] === 'edit' && isset($_POST['Usuario_id_usuario'])) {
+        } elseif (isset($_POST['action']) && $_POST['action'] === 'edit' && isset($_POST['id_usuario'])) {
             $data = [
                 'cpf_usuario' => $_POST['cpf_usuario'] ?? '',
                 'nome_usuario' => $_POST['nome_usuario'] ?? '',
@@ -50,7 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'senha' => $_POST['senha'] ?? '',
             ];
 
-            $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
+            $response = callApi('PUT', "$apiUrl/{$_POST['id_usuario']}", $data);
+            echo '<pre>';
+            echo "Dados enviados para a API:\n";
+            print_r($data);
+            echo "\nResposta da API:\n";
+            print_r($response);
+            echo '</pre>';
             if ($response['http_code'] === 200) {
                 $message = 'Usuário atualizado com sucesso!';
             } else {
@@ -60,9 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+
 // Deletar usuário
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['Usuario_id_usuario'])) {
-    $response = callApi('DELETE', "$apiUrl/{$_POST['Usuario_id_usuario']}");
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['id_usuario'])) {
+    $response = callApi('DELETE', "$apiUrl/{$_POST['id_usuario']}");
 
     if($response['http_code'] === 204) {
         $message = 'Usuário excluído com sucesso!';
@@ -70,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $message = 'Erro ao excluir usuário. Tente novamente.';
     }
 
-    }
+}
 
 // Listar usuários (GET)
 $response = callApi('GET', $apiUrl);
@@ -92,7 +105,6 @@ $apiUrlWithFilters = $apiUrl . '?' . http_build_query($queryParams);
 
 $response = callApi('GET', $apiUrlWithFilters);
 $usuarios = $response['http_code'] === 200 ? $response['data'] : [];
-
 
 // Preencher o formulário de edição
 $editData = null;
@@ -124,7 +136,7 @@ if (isset($_GET['edit_id'])) {
     <form method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-lg">
         <input type="hidden" name="action" value="<?= $editData ? 'edit' : 'create' ?>">
         <?php if ($editData): ?>
-            <input type="hidden" name="Usuario_id_usuario" value="<?= $editData['Usuario_id_usuario'] ?>">
+            <input type="hidden" name="id_usuario" value="<?= $editData['id_usuario'] ?>">
         <?php endif; ?>
         <div class="mb-4">
             <label for="cpf_usuario" class="form-label">CPF</label>
@@ -180,36 +192,6 @@ if (isset($_GET['edit_id'])) {
         <button type="submit" class="btn text-white bg-green-600">Salvar</button>
     </form>
 
-    <!-- Formulário de Filtro -->
-    <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg p-4">
-        <form method="GET" action="usuarios.php" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Filtro de Nome -->
-                <div>
-                    <label for="nome_usuario" class="block text-sm font-medium text-gray-700">Nome:</label>
-                    <input type="text" name="nome_usuario" id="nome_usuario" placeholder="Digite o nome" value="<?= htmlspecialchars($_GET['nome_usuario'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-
-                <!-- Filtro de CPF -->
-                <div>
-                    <label for="cpf_usuario" class="block text-sm font-medium text-gray-700">CPF:</label>
-                    <input type="text" name="cpf_usuario" id="cpf_usuario" placeholder="Digite o CPF" value="<?= htmlspecialchars($_GET['cpf_usuario'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-
-                <!-- Filtro de Telefone -->
-                <div>
-                    <label for="telefone" class="block text-sm font-medium text-gray-700">Telefone:</label>
-                    <input type="text" name="telefone" id="telefone" placeholder="Digite o telefone" value="<?= htmlspecialchars($_GET['telefone'] ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-            </div>
-
-            <button type="submit" class="mt-3 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Filtrar
-            </button>
-        </form>
-    </div>
-
-
 
     <!-- Tabela de Listagem de Usuários -->
     <div class="mt-6 overflow-x-auto bg-white rounded-lg shadow-lg">
@@ -227,17 +209,17 @@ if (isset($_GET['edit_id'])) {
                 <?php if (!empty($usuarios)): ?>
                     <?php foreach ($usuarios as $usuario): ?>
                         <tr class="border-t hover:bg-green-50">
-                            <td class="px-6 py-3"><?= htmlspecialchars($usuario['Usuario_id_usuario']) ?></td>
+                            <td class="px-6 py-3"><?= htmlspecialchars($usuario['id_usuario']) ?></td>
                             <td class="px-6 py-3"><?= htmlspecialchars($usuario['cpf_usuario']) ?></td>
                             <td class="px-6 py-3"><?= htmlspecialchars($usuario['nome_usuario']) ?></td>
                             <td class="px-6 py-3"><?= htmlspecialchars($usuario['telefone']) ?></td>
                             <td class="px-6 py-3 flex space-x-2">
                                 <form method="POST" class="d-inline">
-                                    <input type="hidden" name="Usuario_id_usuario" value="<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>">
+                                    <input type="hidden" name="id_usuario" value="<?= htmlspecialchars($usuario['id_usuario']) ?>">
                                     <input type="hidden" name="action" value="delete">
                                     <button type="submit" class="btn text-white bg-red-600 hover:bg-red-800 btn-sm">Excluir</button>
                                 </form>
-                                <a href="?edit_id=<?= htmlspecialchars($usuario['Usuario_id_usuario']) ?>" class="btn text-white bg-yellow-400 hover:bg-yellow-600 btn-sm">Editar</a>
+                                <a href="?edit_id=<?= htmlspecialchars($usuario['id_usuario']) ?>" class="btn text-white bg-yellow-400 hover:bg-yellow-600 btn-sm">Editar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
