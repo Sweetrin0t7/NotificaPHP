@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             $response = callApi('POST', $apiUrl, $data);
+            if ($response['http_code'] === 201) {
+                $message = 'Usuário criada com sucesso!';
+            } else {
+                $message = 'Erro ao criar usuário. Tente novamente. ' . $response['data']['message'];
+            }
 
         // Edição de usuário
         } elseif ($_POST['action'] === 'edit' && isset($_POST['Usuario_id_usuario'])) {
@@ -46,14 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             $response = callApi('PUT', "$apiUrl/{$_POST['Usuario_id_usuario']}", $data);
-
-        // Debug
-        echo '<pre>';
-        echo "Dados enviados para a API:\n";
-        print_r($data);
-        echo "\nResposta da API:\n";
-        print_r($response);
-        echo '</pre>';
+            if ($response['http_code'] === 200) {
+                $message = 'Usuário atualizado com sucesso!';
+            } else {
+                $message = 'Erro ao atualizar usuário. Tente novamente.';
+            }
         }
     }
 }
@@ -62,11 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['Usuario_id_usuario'])) {
     $response = callApi('DELETE', "$apiUrl/{$_POST['Usuario_id_usuario']}");
 
-    // Debug
-    echo '<pre>';
-    echo "\nResposta da API:\n";
-    print_r($response);
-    echo '</pre>';
+    if($response['http_code'] === 204) {
+        $message = 'Usuário excluído com sucesso!';
+    } else {
+        $message = 'Erro ao excluir usuário. Tente novamente.';
+    }
+
     }
 
 // Listar usuários (GET)
@@ -92,6 +95,12 @@ if (isset($_GET['edit_id'])) {
 <body class="bg-green-50">
 <div class="container mx-auto mt-5 p-4">
     <h1 class="text-5xl 15px font-semibold text-green-700 mb-6">Gerenciar Usuários</h1>
+
+    <?php if (!empty($message)): ?>
+        <div class="alert <?= strpos($message, 'Erro') !== false ? 'alert-danger' : 'alert-success' ?>" role="alert">
+            <?= htmlspecialchars($message) ?>
+        </div>
+    <?php endif; ?>
 
     <!-- Criação/Edição -->
     <form method="POST" class="space-y-4 bg-white p-6 rounded-lg shadow-lg">
