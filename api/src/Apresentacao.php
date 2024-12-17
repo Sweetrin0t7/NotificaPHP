@@ -6,7 +6,7 @@ class Apresentacao {
 
     public static function apresentacao() {
         $response = [
-            'autores' => ['Alessandra Freitas Pacheco', 'Renata Oliveira Schäfer'],
+            'autores' => ['Alessandra Freitas Pacheco', 'Renata Oliveira Schafer'],
             'rotas' => [
                 'GET /api/denuncias',  //Listagem
                 'POST /api/denuncias', //Criar
