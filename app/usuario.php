@@ -20,7 +20,6 @@ function callApi(string $method, string $url, array $data = []): array {
 
 // URL da API
 $apiUrl = "http://localhost/api/usuarios";
-//$apiUrl = "http://localhost/NotificaPHP/api/usuarios";
 
 
 // Processamento de POST para criação e edição
