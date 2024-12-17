@@ -47,7 +47,9 @@ class UsuarioController
             switch ($method) {
                 case "GET":
                     $nome_usuario = $request->getQueryParams()["nome_usuario"] ?? null;
-                    $response = $this->service->getUsuarios($nome_usuario);
+                    $cpf_usuario = $request->getQueryParams()["cpf_usuario"] ?? null;
+                    $telefone = $request->getQueryParams()["telefone"] ?? null;
+                    $response = $this->service->getUsuarios($nome_usuario, $cpf_usuario, $telefone);
                     echo json_encode($response);
                     break;
                 case "POST":

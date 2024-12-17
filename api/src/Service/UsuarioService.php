@@ -16,15 +16,13 @@ class UsuarioService
     }
 
 // Método na Service
-function getUsuarios(?string $nome_usuario): array
+function getUsuarios(?string $nome_usuario, ?string $cpf = null, ?string $telefone = null): array
 {
-    if ($nome_usuario) {
-        if ($nome_usuario === "") throw new APIException("Parametros de busca inválidos!", 400);
-        $usuarios = $this->repository->findByNome($nome_usuario);
-        return is_array($usuarios) ? $usuarios : [$usuarios]; 
-    } else {
-        return $this->repository->findAll();
-    }
+    return $this->repository->findUsuarios(
+        nome: $nome_usuario, 
+        cpf: $cpf,
+        telefone: $telefone
+    );
 }
 
 

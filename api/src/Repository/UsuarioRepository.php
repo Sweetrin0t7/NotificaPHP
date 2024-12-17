@@ -35,6 +35,58 @@ class UsuarioRepository {
         return $usuarios;
     }
 
+    public function findUsuarios(
+        ?string $nome = null, 
+        ?string $cpf = null,
+        ?string $telefone = null, 
+    ): array {
+        $query = "SELECT * FROM usuarios WHERE 1";
+        $params = [];
+    
+        // Filtro de nome
+        if ($nome) {
+            $query .= " AND nome_usuario LIKE :nome";
+            $params[':nome'] = '%' . $nome . '%';
+        }
+    
+        // Filtro de CPF
+        if ($cpf) {
+            $query .= " AND cpf_usuario = :cpf";
+            $params[':cpf'] = $cpf;
+        }
+
+         // Filtro de telefone
+        if ($telefone) {
+            $query .= " AND telefone LIKE :telefone";
+            $params[':telefone'] = '%' . $telefone . '%';
+        }
+    
+    
+        $stmt = $this->connection->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+    
+        $stmt->execute();
+    
+        $usuarios = [];
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $usuario = new Usuario(
+                Usuario_id_usuario: $row['id_usuario'],
+                cpf_usuario: $row['cpf_usuario'],
+                nome_usuario: $row['nome_usuario'],
+                telefone: $row['telefone'],
+                senha: $row['senha'],
+                data_cadastro: $row['data_cadastro'],
+                tipo_usuario: $row['tipo_usuario']
+            );
+            $usuarios[] = $usuario;
+        }
+    
+        return $usuarios;
+    }
+
     public function findById(int $id_usuario): ?Usuario {
         $stmt = $this->connection->prepare("SELECT * FROM usuarios WHERE id_usuario = :id_usuario");
         $stmt->bindValue(':id_usuario', $id_usuario, \PDO::PARAM_INT);
