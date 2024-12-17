@@ -9,6 +9,7 @@ use Controller\DenunciaController;
 use Http\Request;
 use Database\Database;
 use Error\APIException;
+use Repository\DenunciaRepository;
 
 header("Content-Type: application/json");
 
@@ -28,7 +29,13 @@ if (isset($_SERVER['REQUEST_URI']) && ($_SERVER['REQUEST_URI'] === '/api' || $_S
             $controller = new DenunciaController();
             $controller->processRequest($request);
         break;
-            
+
+        case'denuncias-pdf':
+            $denunciaRepository = new DenunciaRepository();
+            $denuncias = $denunciaRepository->findAll(); 
+            DenunciaPDF::gerarPDFDenuncias($denuncias);
+            header('Location: /denuncias.php');
+            break;   
         case 'config': 
             Database::config();
             break;

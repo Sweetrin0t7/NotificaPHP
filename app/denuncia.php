@@ -1,4 +1,8 @@
 <?php
+//DOMPDF
+//require_once __DIR__ . '/dompdf/autoload.inc.php';
+//use Dompdf\Dompdf;
+
 $message = '';
 function callApi(string $method, string $url, array $data = []): array {
     $ch = curl_init();
@@ -139,6 +143,29 @@ if (isset($_GET['edit_id'])) {
     $editResponse = callApi('GET', "$apiUrl/{$_GET['edit_id']}");
     $editData = $editResponse['data'] ?? null;
 }
+
+    // Gerar o HTML para o PDF
+    $html = '<h1>Relatório de Denúncias</h1>';
+    $html .= '<table border="1" style="width: 100%; border-collapse: collapse;">';
+    $html .= '<tr><th>ID</th><th>Título</th><th>Categoria</th><th>Status</th><th>Descrição</th></tr>';
+
+    foreach ($denuncias as $denuncia) {
+        $html .= "<tr>
+                    <td>{$denuncia['id_denuncias']}</td>
+                    <td>{$denuncia['titulo']}</td>
+                    <td>{$denuncia['categoria']}</td>
+                    <td>{$denuncia['status']}</td>
+                    <td>{$denuncia['descricao']}</td>
+                </tr>";
+    }
+    $html .= '</table>';
+
+    //Use Dompdf para gerar o PDF
+    //$dompdf = new Dompdf();
+    //$dompdf->loadHtml($html);
+    //$dompdf->setPaper('A4', 'landscape');
+    //$dompdf->render();
+    
 ?>
 
 <!DOCTYPE html>
@@ -288,6 +315,7 @@ if (isset($_GET['edit_id'])) {
             </tbody>
         </table>
     </div>
+    <a href="DenunciaPDF.php" class="btn btn-primary m-3">Gerar PDF</a>
     </div>
     <a href="index.html" class="btn btn-primary m-3">Voltar</a>
 </div>
