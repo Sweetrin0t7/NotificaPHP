@@ -36,7 +36,7 @@ function getUsuarios(?string $nome_usuario, ?string $cpf = null, ?string $telefo
     function createNewUsuario(string $cpf_usuario, string $nome_usuario, string $telefone, string $senha): Usuario
     {
         $usuario = new Usuario(
-            Usuario_id_usuario: null, // ID inicial ta null por enquanto
+            id_usuario: null, // ID inicial ta null por enquanto
             cpf_usuario: $cpf_usuario,
             nome_usuario: trim($nome_usuario),
             telefone: $telefone,

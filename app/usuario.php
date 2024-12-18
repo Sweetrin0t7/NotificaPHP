@@ -35,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             $response = callApi('POST', $apiUrl, $data);
-            echo '<pre>';
-            echo "Dados enviados para a API:\n";
-            print_r($data);
-            echo "\nResposta da API:\n";
-            print_r($response);
-            echo '</pre>';
+            // echo '<pre>';
+            // echo "Dados enviados para a API:\n";
+            // print_r($data);
+            // echo "\nResposta da API:\n";
+            // print_r($response);
+            // echo '</pre>';
             if ($response['http_code'] === 201) {
                 $message = 'Usuário criado com sucesso!';
             } else {
@@ -57,12 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             $response = callApi('PUT', "$apiUrl/{$_POST['id_usuario']}", $data);
-            echo '<pre>';
-            echo "Dados enviados para a API:\n";
-            print_r($data);
-            echo "\nResposta da API:\n";
-            print_r($response);
-            echo '</pre>';
+            // echo '<pre>';
+            // echo "Dados enviados para a API:\n";
+            // print_r($data);
+            // echo "\nResposta da API:\n";
+            // print_r($response);
+            // echo '</pre>';
             if ($response['http_code'] === 200) {
                 $message = 'Usuário atualizado com sucesso!';
             } else {
